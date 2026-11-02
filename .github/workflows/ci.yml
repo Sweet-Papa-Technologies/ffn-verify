@@ -43,6 +43,12 @@ jobs:
           cache: pnpm
       - name: npm 12, which installs no dependency scripts, git or remote dependencies by default
         run: npm install -g npm@12.2.1
+      - name: npm and PyPI versions agree
+        run: |
+          npm_v=$(node -p "require('./packages/verify-business/package.json').version")
+          py_v=$(python3 -c "import runpy; print(runpy.run_path('python/ffn_verify/_version.py')['__version__'])")
+          echo "npm $npm_v, PyPI $py_v"
+          test "$npm_v" = "$py_v"
       - run: pnpm install --frozen-lockfile
       - name: Pack (prepack builds)
         working-directory: packages/verify-business

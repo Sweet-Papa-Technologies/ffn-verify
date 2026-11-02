@@ -27,7 +27,7 @@ jobs:
         run: |
           tag="${GITHUB_REF_NAME#v}"
           npm_v=$(node -p "require('./packages/verify-business/package.json').version")
-          py_v=$(python3 -c "import tomllib; print(tomllib.load(open('python/pyproject.toml','rb'))['project']['version'])")
+          py_v=$(python3 -c "import runpy; print(runpy.run_path('python/ffn_verify/_version.py')['__version__'])")
           echo "tag $tag, npm $npm_v, PyPI $py_v"
           test "$tag" = "$npm_v" && test "$tag" = "$py_v"
 
