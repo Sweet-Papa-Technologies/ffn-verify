@@ -65,7 +65,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   pypi:
-    needs: check
+    # After npm has staged, so a failed npm step never leaves PyPI a version ahead.
+    needs: [check, npm]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
