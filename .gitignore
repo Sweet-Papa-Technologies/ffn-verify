@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.tsbuildinfo
+*.tgz
+__pycache__/
+*.egg-info/
+.venv/
+python/build/
+python/dist/
+.DS_Store

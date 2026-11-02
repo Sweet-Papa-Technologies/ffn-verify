@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ffn-verify"
+dynamic = ["version"]
+description = "FFN Verified Business public verifier: registry record, both signatures, status, domain binding and delegation, no wallet needed"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Sweet Papa Technologies LLC" }]
+keywords = [
+    "ffn",
+    "fofo network",
+    "business verification",
+    "verifiable credentials",
+    "sd-jwt",
+    "did:web",
+    "token status list",
+    "delegation",
+    "ai agents",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+    # No "License ::" classifier: setuptools refuses one next to the SPDX license
+    # expression above, which supersedes it (PEP 639).
+    "Topic :: Security :: Cryptography",
+]
+dependencies = ["cryptography>=44.0.1,<51"]
+
+[project.urls]
+Homepage = "https://registry.fofo.network/agents"
+Documentation = "https://registry.fofo.network/agents"
+Source = "https://github.com/Sweet-Papa-Technologies/ffn-verify"
+Issues = "https://github.com/Sweet-Papa-Technologies/ffn-verify/issues"
+API = "https://registry.fofo.network/openapi.json"
+
+[tool.setuptools]
+packages = ["ffn_verify"]
+
+[tool.setuptools.package-data]
+ffn_verify = ["py.typed"]
+
+[tool.setuptools.dynamic]
+version = { attr = "ffn_verify._version.__version__" }
+
+[tool.ruff]
+line-length = 120

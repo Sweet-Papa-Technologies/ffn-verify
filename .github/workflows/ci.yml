@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  typescript:
+    name: TypeScript (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r typecheck
+      - run: pnpm -r test
+
+  npm-package:
+    name: npm package installs and imports
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Pack (prepack builds)
+        working-directory: packages/verify-business
+        run: pnpm pack --pack-destination "$RUNNER_TEMP/pack"
+      - name: Install the tarball into an empty project and import it
+        run: |
+          mkdir "$RUNNER_TEMP/consumer" && cd "$RUNNER_TEMP/consumer"
+          npm init -y >/dev/null
+          npm install "$RUNNER_TEMP"/pack/*.tgz
+          node -e "import('@fofonet/verify-business').then((m) => { if (typeof m.verifyBusiness !== 'function' || !m.FFN_BUSINESS_REGISTRY.keyThumbprints?.length) process.exit(1); console.log(Object.keys(m).length, 'exports') })"
+          node -e "const p = require('./node_modules/@fofonet/verify-business/package.json'); if (p.devDependencies || JSON.stringify(p).includes('workspace:')) process.exit(1)"
+
+  python:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13', '3.14']
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e .
+      - run: python -m unittest discover -s tests -v
+      - name: Build and check the distributions
+        if: matrix.python == '3.13'
+        run: |
+          pip install build twine
+          python -m build
+          twine check --strict dist/*

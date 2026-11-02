@@ -1,0 +1,77 @@
+{
+  "name": "@fofonet/verify-business",
+  "version": "0.1.0",
+  "description": "FFN Verified Business public verifier: verifyBusiness(domain) \u2014 registry record, both signatures, status, domain binding and delegation, no wallet needed",
+  "keywords": [
+    "ffn",
+    "fofo-network",
+    "verified-business",
+    "business-verification",
+    "verifiable-credentials",
+    "sd-jwt",
+    "sd-jwt-vc",
+    "did-web",
+    "token-status-list",
+    "domain-binding",
+    "ai-agents",
+    "verifier"
+  ],
+  "license": "Apache-2.0",
+  "author": "Sweet Papa Technologies LLC",
+  "homepage": "https://registry.fofo.network/agents",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sweet-Papa-Technologies/ffn-verify.git",
+    "directory": "packages/verify-business"
+  },
+  "bugs": {
+    "url": "https://github.com/Sweet-Papa-Technologies/ffn-verify/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./package.json": "./package.json"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "prepack": "pnpm run clean && pnpm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@owf/token-status-list": "^0.4.2",
+    "@sd-jwt/core": "^0.22.0",
+    "@sd-jwt/sd-jwt-vc": "^0.22.0"
+  },
+  "devDependencies": {
+    "@fofonet/door-core": "workspace:*",
+    "tsup": "9.0.0"
+  }
+}

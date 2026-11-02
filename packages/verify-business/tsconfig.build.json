@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "sourceMap": false,
+    // door-core is bundled into the published package, types included: point at its source.
+    "paths": { "@fofonet/door-core": ["../door-core/src/index.ts"] }
+  },
+  "include": ["src"]
+}

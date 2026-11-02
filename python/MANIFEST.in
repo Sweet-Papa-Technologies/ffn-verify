@@ -1,0 +1,4 @@
+# The sdist carries the tests (they skip what needs the repository's shared
+# vectors; set FFN_VECTORS to run those) but no build or cache debris.
+graft tests
+global-exclude __pycache__ *.py[cod]

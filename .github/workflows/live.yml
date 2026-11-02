@@ -1,0 +1,59 @@
+name: Live registry
+
+# Every day, both libraries and the HTTP API verify a real listing on the
+# production registry, so a registry-side regression shows up within a day.
+
+on:
+  schedule:
+    - cron: '17 14 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOMAIN: sweetpapatechnologies.com
+  PHONE: '+15104970742'
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.13'
+      - run: pnpm install --frozen-lockfile && pnpm --filter @fofonet/verify-business build
+      - name: TypeScript, by domain and by phone
+        run: |
+          node --input-type=module -e "
+            const m = await import('./packages/verify-business/dist/index.js');
+            for (const q of [process.env.DOMAIN, { phone: process.env.PHONE }]) {
+              const r = await m.verifyBusiness(q, { registry: m.FFN_BUSINESS_REGISTRY });
+              console.log(r.summary);
+              if (!r.verified || !r.observedMatches) process.exit(1);
+            }"
+      - name: Python, by domain and by phone
+        run: |
+          pip install ./python
+          python - <<'PY'
+          import os, sys
+          from ffn_verify import FFN_BUSINESS_REGISTRY, verify_business
+          for q in ({"domain": os.environ["DOMAIN"]}, {"phone": os.environ["PHONE"]}):
+              r = verify_business(**q, registry=FFN_BUSINESS_REGISTRY)
+              print(r["summary"])
+              if not (r["verified"] and r["observedMatches"]):
+                  sys.exit(1)
+          PY
+      - name: HTTP API
+        run: |
+          curl -fsS "https://registry.fofo.network/v1/verify?domain=$DOMAIN" | tee verify.json
+          python -c "import json,sys; sys.exit(0 if json.load(open('verify.json'))['verified'] else 1)"
+          test "$(curl -s -o /dev/null -w '%{http_code}' https://registry.fofo.network/status/1)" = 200

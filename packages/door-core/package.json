@@ -1,0 +1,45 @@
+{
+  "name": "@fofonet/door-core",
+  "version": "0.1.0",
+  "description": "FFN Door SDK shared core: claim catalog, types, ES256 JOSE, did:web, trust registry, SD-JWT VC plumbing",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./firestore": {
+      "development": "./src/firestore.ts",
+      "types": "./dist/firestore.d.ts",
+      "default": "./dist/firestore.js"
+    }
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./firestore": {
+        "types": "./dist/firestore.d.ts",
+        "default": "./dist/firestore.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@sd-jwt/sd-jwt-vc": "0.22.0",
+    "@sd-jwt/core": "0.22.0",
+    "@owf/token-status-list": "0.4.2"
+  }
+}

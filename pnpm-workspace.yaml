@@ -1,0 +1,5 @@
+packages:
+  - 'packages/*'
+
+# Supply-chain guard: never resolve a version published less than 7 days ago.
+minimumReleaseAge: 10080
