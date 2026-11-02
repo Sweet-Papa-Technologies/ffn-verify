@@ -533,6 +533,36 @@ describe('status lists that inflate past 16 MiB', () => {
   });
 });
 
+describe('status list claims', () => {
+  it('must name the URI the list was fetched from and say when it was issued', async () => {
+    const web = new FakeWeb();
+    const registry = await party('did:web:registry.test');
+    web.publishParty(registry);
+    const uri = 'https://registry.test/status/1';
+    const now = Math.floor(Date.now() / 1000);
+    const check = async (claims: Record<string, unknown>) => {
+      const jwt = await signJwt(
+        registry.signer,
+        {
+          iss: registry.did,
+          exp: now + 86_400,
+          status_list: { bits: 2, lst: deflateSync(Buffer.alloc(16)).toString('base64url') },
+          ...claims,
+        },
+        { typ: 'statuslist+jwt' },
+      );
+      web.pages.set(uri, { body: jwt, type: 'application/statuslist+jwt' });
+      const checker = new StatusChecker({ resolver: web.resolver(), fetch: web.fetch });
+      return (await checker.check({ status_list: { idx: 0, uri } })).status;
+    };
+    expect(await check({ sub: uri, iat: now })).toBe('valid');
+    expect(await check({ sub: 'https://registry.test/status/2', iat: now })).toBe('unknown');
+    expect(await check({ iat: now })).toBe('unknown');
+    expect(await check({ sub: uri })).toBe('unknown');
+    expect(await check({ sub: uri, iat: String(now) })).toBe('unknown');
+  });
+});
+
 describe('status values', () => {
   it('read from the inflated bytes match the token-status-list library, entry by entry', async () => {
     const web = new FakeWeb();

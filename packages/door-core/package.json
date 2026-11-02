@@ -39,7 +39,9 @@
   },
   "dependencies": {
     "@sd-jwt/sd-jwt-vc": "0.22.0",
-    "@sd-jwt/core": "0.22.0",
+    "@sd-jwt/core": "0.22.0"
+  },
+  "devDependencies": {
     "@owf/token-status-list": "0.4.2"
   }
 }

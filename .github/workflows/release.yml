@@ -1,8 +1,13 @@
 name: Release
 
-# Push a tag vX.Y.Z whose version matches both packages. npm publishes with
-# provenance (NPM_TOKEN secret until npm trusted publishing is configured);
-# PyPI publishes through trusted publishing, with no stored password.
+# Push a tag vX.Y.Z whose version matches both packages.
+#
+# npm: this workflow only stages the release (npm stage publish). Nobody can
+# install it until a maintainer approves it on npmjs.com with 2FA. It signs in
+# with npm trusted publishing (OIDC) once that is set up for the package, and
+# until then with NPM_TOKEN, a stage-only token that can't publish by itself.
+# PyPI: trusted publishing, with no stored password; the pypi environment's
+# required reviewer approves the upload.
 
 on:
   push:
@@ -40,16 +45,22 @@ jobs:
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
+      - name: npm 12 (staged publishing)
+        run: npm install -g npm@12.2.1
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r test
       - name: Pack (prepack builds; the pnpmfile strips devDependencies and scripts)
         working-directory: packages/verify-business
         run: pnpm pack --pack-destination "$RUNNER_TEMP/pack"
-      - name: Publish with provenance
-        run: npm publish "$RUNNER_TEMP"/pack/*.tgz --provenance --access public
+      - name: Stage for approval
+        working-directory: ${{ runner.temp }}
+        run: |
+          tar -xzf pack/*.tgz
+          cd package
+          npm stage publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

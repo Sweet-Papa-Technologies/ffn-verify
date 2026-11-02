@@ -1,4 +1,3 @@
-import { verifyStatusListJwtClaims } from '@owf/token-status-list';
 import type { CredentialStatus } from './business.js';
 import type { DidResolver, Fetch } from './did-web.js';
 import { b64uDecode, decodeJwt, verifyJwt } from './jose.js';
@@ -127,14 +126,11 @@ export class StatusChecker {
       skew: 7 * 86_400,
       now: this.now(),
     });
-    // The same clock and week of skew as the signature check, so a last-good copy
-    // outlives a day-long outage and test vectors replay at their own `now`.
-    verifyStatusListJwtClaims(verified.payload as never, {
-      uri,
-      now: new Date(this.now() * 1000),
-      skewSeconds: 7 * 86_400,
-      checkFreshness: false,
-    });
+    // exp and nbf were checked with the signature. The spec also requires the list
+    // to name the URI it was fetched from, and to say when it was issued.
+    const { sub, iat } = verified.payload;
+    if (sub !== uri) throw new Error('status list subject is not the URI it was fetched from');
+    if (typeof iat !== 'number') throw new Error('status list has no issued-at time');
     const list = (verified.payload as { status_list?: { lst?: unknown; bits?: unknown } })
       .status_list;
     const bits = list?.bits;

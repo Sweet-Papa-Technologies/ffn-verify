@@ -3,6 +3,12 @@
     <img src="https://raw.githubusercontent.com/Sweet-Papa-Technologies/ffn-verify/main/assets/ffn-verify-banner.jpg" alt="FFN Verified Business: check a business before your agent trusts it." width="100%">
   </a>
 </p>
+<p align="center">
+  <a href="https://github.com/Sweet-Papa-Technologies/ffn-verify/actions/workflows/ci.yml"><img src="https://github.com/Sweet-Papa-Technologies/ffn-verify/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+  <a href="https://pypi.org/project/ffn-verify/"><img src="https://img.shields.io/pypi/v/ffn-verify?label=PyPI" alt="PyPI"></a>
+  <a href="https://pypi.org/project/ffn-verify/"><img src="https://img.shields.io/pypi/pyversions/ffn-verify" alt="Python versions"></a>
+  <a href="https://github.com/Sweet-Papa-Technologies/ffn-verify/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License: Apache-2.0"></a>
+</p>
 
 # ffn-verify
 

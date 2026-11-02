@@ -3,6 +3,12 @@
     <img src="https://raw.githubusercontent.com/Sweet-Papa-Technologies/ffn-verify/main/assets/ffn-verify-banner.jpg" alt="FFN Verified Business: check a business before your agent trusts it." width="100%">
   </a>
 </p>
+<p align="center">
+  <a href="https://github.com/Sweet-Papa-Technologies/ffn-verify/actions/workflows/ci.yml"><img src="https://github.com/Sweet-Papa-Technologies/ffn-verify/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+  <a href="https://www.npmjs.com/package/@fofonet/verify-business"><img src="https://img.shields.io/npm/v/@fofonet/verify-business?label=npm" alt="npm"></a>
+  <a href="https://www.npmjs.com/package/@fofonet/verify-business"><img src="https://img.shields.io/node/v/@fofonet/verify-business" alt="Node version"></a>
+  <a href="https://github.com/Sweet-Papa-Technologies/ffn-verify/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License: Apache-2.0"></a>
+</p>
 
 # @fofonet/verify-business
 
@@ -15,6 +21,8 @@ npm install @fofonet/verify-business
 ```
 
 Node 20 or later (it uses the built-in `fetch` and WebCrypto). ESM only, with TypeScript types included.
+
+npm 12 and pnpm may say they blocked an install script from `cbor-extract`, which comes in through `@sd-jwt/sd-jwt-vc`. Leave it blocked: it only speeds up CBOR decoding, which this package doesn't use. This package has no install scripts of its own.
 
 ## Verify a business
 

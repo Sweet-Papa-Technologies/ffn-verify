@@ -66,12 +66,12 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@owf/token-status-list": "^0.4.2",
     "@sd-jwt/core": "^0.22.0",
     "@sd-jwt/sd-jwt-vc": "^0.22.0"
   },
   "devDependencies": {
     "@fofonet/door-core": "workspace:*",
+    "@owf/token-status-list": "0.4.2",
     "tsup": "9.0.0"
   }
 }

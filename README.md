@@ -1,7 +1,15 @@
 <p align="center">
   <a href="https://registry.fofo.network">
-    <img src="https://raw.githubusercontent.com/Sweet-Papa-Technologies/ffn-verify/main/assets/ffn-verify-banner.jpg" alt="FFN Verified Business: check a business before your agent trusts it." width="100%">
+    <img src="assets/ffn-verify-banner.jpg" alt="FFN Verified Business: check a business before your agent trusts it." width="100%">
   </a>
+</p>
+<p align="center">
+  <a href="https://github.com/Sweet-Papa-Technologies/ffn-verify/actions/workflows/ci.yml"><img src="https://github.com/Sweet-Papa-Technologies/ffn-verify/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+  <a href="https://www.npmjs.com/package/@fofonet/verify-business"><img src="https://img.shields.io/npm/v/@fofonet/verify-business?label=npm" alt="npm"></a>
+  <a href="https://www.npmjs.com/package/@fofonet/verify-business"><img src="https://img.shields.io/node/v/@fofonet/verify-business" alt="Node version"></a>
+  <a href="https://pypi.org/project/ffn-verify/"><img src="https://img.shields.io/pypi/v/ffn-verify?label=PyPI" alt="PyPI"></a>
+  <a href="https://pypi.org/project/ffn-verify/"><img src="https://img.shields.io/pypi/pyversions/ffn-verify" alt="Python versions"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License: Apache-2.0"></a>
 </p>
 
 # FFN Verify
@@ -100,6 +108,13 @@ When `verified` is false, `failure.code` says why:
 - [Dispute a record](https://registry.fofo.network/dispute)
 - [FoFo Network](https://fofo.network) · [FFN Pass](https://pass.fofo.network)
 - [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md)
+
+## Releases
+
+Both packages are built and published by this repository's [release workflow](.github/workflows/release.yml) when a version tag is pushed, not from anyone's computer, and neither stores a long-lived password:
+
+- **npm:** the workflow stages each version with npm's [staged publishing](https://docs.npmjs.com/staged-publishing), and nobody can install it until a maintainer approves it with 2FA. The package has no install scripts.
+- **PyPI:** uploaded through [trusted publishing](https://docs.pypi.org/trusted-publishers/) after a maintainer approves the release.
 
 ## Development
 

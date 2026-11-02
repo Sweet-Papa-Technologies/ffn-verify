@@ -22,21 +22,19 @@ importers:
 
   packages/door-core:
     dependencies:
-      '@owf/token-status-list':
-        specifier: 0.4.2
-        version: 0.4.2
       '@sd-jwt/core':
         specifier: 0.22.0
         version: 0.22.0
       '@sd-jwt/sd-jwt-vc':
         specifier: 0.22.0
         version: 0.22.0
+    devDependencies:
+      '@owf/token-status-list':
+        specifier: 0.4.2
+        version: 0.4.2
 
   packages/verify-business:
     dependencies:
-      '@owf/token-status-list':
-        specifier: ^0.4.2
-        version: 0.4.2
       '@sd-jwt/core':
         specifier: ^0.22.0
         version: 0.22.0
@@ -47,6 +45,9 @@ importers:
       '@fofonet/door-core':
         specifier: workspace:*
         version: link:../door-core
+      '@owf/token-status-list':
+        specifier: 0.4.2
+        version: 0.4.2
       tsup:
         specifier: 9.0.0
         version: 9.0.0(postcss@8.5.31)(typescript@6.0.3)
