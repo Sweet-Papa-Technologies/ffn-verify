@@ -2,7 +2,7 @@
 
 Both packages share a version number, since they implement the same checks and pass the same test vectors.
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-11-02)
 
 First public release of `@fofonet/verify-business` (npm) and `ffn-verify` (PyPI).
 
